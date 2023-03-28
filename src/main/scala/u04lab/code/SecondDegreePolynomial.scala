@@ -11,7 +11,29 @@ trait SecondDegreePolynomial:
 
 
 object SecondDegreePolynomial:
-  def apply(secondDegree: Double, firstDegree: Double, constant: Double): SecondDegreePolynomial = ??? // Fill here
+  def apply(secondDegree: Double, firstDegree: Double, constant: Double): SecondDegreePolynomial =
+    SecondDegreePolynomialImpl(secondDegree, firstDegree, constant)
+
+private case class SecondDegreePolynomialImpl(
+                                _secondDegree: Double,
+                                _firstDegree: Double,
+                                _constant: Double
+                                ) extends SecondDegreePolynomial:
+  override def constant: Double = _constant
+  override def firstDegree: Double = _firstDegree
+  override def secondDegree: Double = _secondDegree
+  override def +(polynomial: SecondDegreePolynomial): SecondDegreePolynomial =
+    SecondDegreePolynomialImpl(
+      _secondDegree + polynomial.secondDegree,
+      _firstDegree + polynomial.firstDegree,
+      _constant + polynomial.constant
+    )
+  override def -(polynomial: SecondDegreePolynomial): SecondDegreePolynomial =
+    SecondDegreePolynomialImpl(
+      _secondDegree - polynomial.secondDegree,
+      _firstDegree - polynomial.firstDegree,
+      _constant - polynomial.constant,
+    )
 
 @main def checkComplex(): Unit =
   val simplePolynomial = SecondDegreePolynomial(1.0, 0, 3)
@@ -21,6 +43,9 @@ object SecondDegreePolynomial:
   println((sum, sum.secondDegree, sum.firstDegree, sum.constant)) // 1.0 * X^2 + 1.0 * X + 3.0
   val multipleOperations = fullPolynomial - (anotherPolynomial + simplePolynomial)
   println((multipleOperations, multipleOperations.secondDegree, multipleOperations.firstDegree, multipleOperations.constant)) // 2.0 * X^2 + 1.0 * X + 2.0
+  val simpleCopyPolynomial = SecondDegreePolynomial(1.0,0,3)
+  assert(simpleCopyPolynomial == simplePolynomial)
+
 
 /** Hints:
   *   - implement SecondDegreePolynomial with a SecondDegreePolynomialImpl class, similar to PersonImpl in slides
@@ -28,3 +53,7 @@ object SecondDegreePolynomial:
   *   - use a case class SecondDegreePolynomialImpl instead
   *   - check equality and toString now
   */
+
+
+
+
