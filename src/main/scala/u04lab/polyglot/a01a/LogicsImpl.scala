@@ -10,7 +10,7 @@ class LogicsImpl(
                   private val boat: Int) extends Logics:
 
   private var hitCells = List.empty[(Int, Int)]
-  private val boatPos = LogicsImpl.defaultBoatPositionGenerator(size, boat)
+  private val boatPos = LogicsImpl.boatPositionGenerator(size, boat)
   println(s"Boat position: $boatPos")
   def hit(row: Int, col: Int): Result = (row, col) match
     case (row, col) if row == boatPos(0) && col >= boatPos(1) && col < boatPos(0) + boat =>
@@ -19,9 +19,5 @@ class LogicsImpl(
     case _ => if length(hitCells) == LogicsImpl.NUMBER_OF_FAILURES then Logics.Result.LOST else Logics.Result.MISS
   object LogicsImpl:
      val NUMBER_OF_FAILURES = 5
-     def defaultBoatPositionGenerator(size: Int, boatLength: Int): (Int, Int) =
-       val range = 0 to size - boatLength
-       val row = scala.util.Random.nextInt(size)
-       val col = range(scala.util.Random.nextInt(range.length))
-       (row, col)
-
+     def boatPositionGenerator(size: Int, boatLength: Int): (Int, Int) =
+       (nextInt(size), nextInt(size - boatLength + 1))

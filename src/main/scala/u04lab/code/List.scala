@@ -74,4 +74,6 @@ object List:
     case Seq(head, tail*) => Cons(head, fromSeq(tail))
     case _ => Nil()
 
+  def apply[A](a:A*): List[A] = fromSeq(a)
+
 end List
