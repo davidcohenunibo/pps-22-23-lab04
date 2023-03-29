@@ -54,43 +54,11 @@ trait Warehouse:
 object Warehouse:
   def apply(): Warehouse = WarehouseImpl()
 
-  //implement Warehouse
   private case class WarehouseImpl() extends Warehouse:
 
     private var _items: List[Item] = List.empty
     override def store(item: Item): Unit = { _items = List.add(_items,item) }
-    override def searchItems(tag: String): List[Item] = _items
+    override def searchItems(tag: String): List[Item] = List.filter(_items)( i => List.contains(i.tags,tag))
     override def retrieve(code: Int): Option[Item] = List.find(_items)( _.code == code)
-    override def remove(item: Item): Unit = List.remove(_items)(_ == item)
+    override def remove(item: Item): Unit = {_items = List.remove(_items)(_ == item) }
     override def contains(itemCode: Int): Boolean = List.contains(List.flatMap(_items)(i => Cons(i.code, Nil())),itemCode)
-
-
-@main def mainWarehouse(): Unit =
-  val warehouse = Warehouse()
-//  val dellXps = Item(33, "Dell XPS 15", cons("notebook", empty))
-//  val dellInspiron = Item(34, "Dell Inspiron 13", cons("notebook", empty))
-//  val xiaomiMoped = Item(35, "Xiaomi S1", cons("moped", cons("mobility", empty)))
-  val dellXps = Item(33, "Dell XPS 15","notebook")
-  val dellInspiron = Item(34, "Dell Inspiron 13", "notebook")
-  val xiaomiMoped = Item(35, "Xiaomi S1", "moped", "mobility")
-  println(warehouse.contains(dellXps.code)) // false
-  println(warehouse.store(dellXps)) // side effect, add dell xps to the warehouse /////
-  println(warehouse.contains(dellXps.code)) // true /////
-  println(warehouse.store(dellInspiron)) // side effect, add dell inspiron to the warehouse
-  println(warehouse.store(xiaomiMoped)) // side effect, add xiaomi moped to the warehouse
-  println(warehouse.searchItems("mobility")) // List(xiaomiMoped))  ///
-  println(warehouse.searchItems("notebook")) // List(dellXps, dellInspiron)) ////
-  println(warehouse.retrieve(11)) // None
-  println(warehouse.retrieve(dellXps.code)) // Some(dellXps))
-  println(warehouse.remove(dellXps)) // side effect, remove dell xps from the warehouse
-  println(warehouse.retrieve(dellXps.code)) // None
-
-/** Hints:
- * - Implement the Item with a simple case class
- * - Implement the Warehouse keeping a private List of items
- * - Start implementing contains and store
- * - Implement searchItems using filter and contains
- * - Implement retrieve using find
- * - Implement remove using filter
- * - Refactor the code of Item accepting a variable number of tags (hint: use _*)
-*/
